@@ -10,7 +10,7 @@ const usersRouter = require("./routes/users");
 const tokenChecker = require("./lib/tokenChecker");
 const likesRouter = require("./routes/likes");
 const allusersRouter = require("./routes/allusers");
-const friendsarrayRouter = require("./routes/friendsArray");
+const friendsarrayRouter = require("./routes/friendsarray");
 
 const app = express();
 
