@@ -16,7 +16,11 @@ const app = express();
 
 // setup for receiving JSON
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "https://acebook-team-air.netlify.app",
+  })
+);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
