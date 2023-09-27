@@ -10,7 +10,7 @@ const ProfileCard = ({}) => {
 
   useEffect(() => {
     if (token) {
-      fetch("/users", {
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +33,7 @@ const ProfileCard = ({}) => {
       const formData = new FormData();
       formData.append("avatar", newAvatar);
       if (token) {
-        fetch(`/users/${user._id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/users/${user._id}`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,

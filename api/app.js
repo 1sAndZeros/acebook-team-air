@@ -2,21 +2,21 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
-
+var cors = require("cors");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
 const authenticationRouter = require("./routes/authentication");
 const usersRouter = require("./routes/users");
-const tokenChecker = require('./lib/tokenChecker')
-const likesRouter = require('./routes/likes');
-const allusersRouter = require('./routes/allusers');
+const tokenChecker = require("./lib/tokenChecker");
+const likesRouter = require("./routes/likes");
+const allusersRouter = require("./routes/allusers");
 const friendsarrayRouter = require("./routes/friendsArray");
 
 const app = express();
 
 // setup for receiving JSON
 app.use(express.json());
-
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));

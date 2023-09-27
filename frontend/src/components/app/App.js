@@ -4,22 +4,15 @@ import SignUpForm from "../user/SignUpForm";
 import Profile from "../profile/Profile";
 import React, { useState, useEffect } from "react";
 import Feed from "../feed/Feed";
-import {
-  useNavigate,
-  Routes,
-  Route,
-  Redirect,
-  Navigate,
-} from "react-router-dom";
+import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
 
 const App = () => {
-  const defaultUser = { username: " " };
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(window.localStorage.getItem("token"));
 
   useEffect(() => {
     if (token) {
-      fetch("/users", {
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

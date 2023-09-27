@@ -3,22 +3,22 @@ import { Link } from "react-router-dom";
 const LogInForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState('')
-  
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let response = await fetch("/tokens", {
+    let response = await fetch(`${process.env.REACT_APP_API_URL}/tokens`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email: email, password: password }),
     });
-    
+
     if (response.status !== 201) {
-      let data = await response.json()
-      setErrorMessage(data.message)
+      let data = await response.json();
+      setErrorMessage(data.message);
       //navigate("/login");
     } else {
       let data = await response.json();

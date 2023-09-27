@@ -13,7 +13,7 @@ const Post = ({ post, token, user }) => {
 
   useEffect(() => {
     if (token) {
-      fetch(`/likes?postId=${post._id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/likes?postId=${post._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,7 +54,7 @@ const Post = ({ post, token, user }) => {
       if (liked) {
         method = "DELETE";
       }
-      fetch("/likes", {
+      fetch(`${process.env.REACT_APP_API_URL}/likes`, {
         method: method,
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ const Post = ({ post, token, user }) => {
     };
 
     if (token) {
-      fetch("/comments", {
+      fetch(`${process.env.REACT_APP_API_URL}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,14 +126,19 @@ const Post = ({ post, token, user }) => {
   return (
     <article className="post" data-cy="post" key={post._id}>
       <div className="post-header">
-        <Avatar size={50} user={post.user}/>
+        <Avatar size={50} user={post.user} />
         <div>
           <p className="username">{post.user.username}</p>
           <p className="datetime">{formattedDate}</p>
         </div>
       </div>
       <p>{post.message}</p>
-      {post.photo && <img className="post-img" src={`/${post.photo}`} />}
+      {post.photo && (
+        <img
+          className="post-img"
+          src={`${process.env.REACT_APP_API_URL}/${post.photo}`}
+        />
+      )}
       <Like likeCount={likeCount} />
       <div className="post-buttons">
         <button onClick={handleLikeClick} className="btn btn-primary">

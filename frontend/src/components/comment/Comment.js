@@ -10,7 +10,7 @@ const Comment = ({ comment, post, token, user }) => {
   // Get all data
   useEffect(() => {
     if (token) {
-      fetch(`/likes?commentId=${comment._id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/likes?commentId=${comment._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -41,7 +41,7 @@ const Comment = ({ comment, post, token, user }) => {
       if (liked) {
         method = "DELETE";
       }
-      fetch("/likes", {
+      fetch(`${process.env.REACT_APP_API_URL}/likes`, {
         method: method,
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const Comment = ({ comment, post, token, user }) => {
 
   return (
     <div className="comment">
-      <Avatar size={35} user={comment.user}/>
+      <Avatar size={35} user={comment.user} />
       <div>
         <div className="details">
           <p className="username">{comment.user.username}</p>

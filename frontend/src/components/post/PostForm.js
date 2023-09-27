@@ -20,7 +20,7 @@ const PostForm = ({ token }) => {
     formData.append("photo", photo);
     formData.append("message", message);
     if (token) {
-      fetch("/posts", {
+      fetch(`${process.env.REACT_APP_API_URL}/posts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

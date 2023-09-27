@@ -6,48 +6,52 @@ const SignUpForm = ({ navigate }) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [photo, setPhoto] = useState("");
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    if(!passwordValiding(password)){
-      setErrorMessage("Password not valid. Password must include an uppercase and lowercase character, a special character (@$!%*?&) and be a minimum of 8 characters")
-    }else if(password != confirmPassword){
-      setErrorMessage("Passwords do not match")
-    }
-    else{
-      fetch("/users", {
+    event.preventDefault();
+    if (!passwordValiding(password)) {
+      setErrorMessage(
+        "Password not valid. Password must include an uppercase and lowercase character, a special character (@$!%*?&) and be a minimum of 8 characters"
+      );
+    } else if (password != confirmPassword) {
+      setErrorMessage("Passwords do not match");
+    } else {
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email, password: password, username: username, photo: photo }),
-      }).then((response) => {
-        if (response.status === 201) {
-          navigate("/login");
-        } else {
-          return response.json()
-        }
-      }).then( (data) => {
-        setErrorMessage(data.message)
-      }
-      )
-    };}
-    
-  
-  
-
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          username: username,
+          photo: photo,
+        }),
+      })
+        .then((response) => {
+          if (response.status === 201) {
+            navigate("/login");
+          } else {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          setErrorMessage(data.message);
+        });
+    }
+  };
 
   const passwordValiding = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (regex.test(password)) {
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-  }
-  
+  };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -60,14 +64,14 @@ const SignUpForm = ({ navigate }) => {
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
   };
-  
+
   const handleNameChange = (event) => {
     setUsername(event.target.value);
-  };  
+  };
 
   const handlePhotoChange = (event) => {
     setPhoto(event.target.value);
-  };   
+  };
 
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center p-4">
@@ -144,7 +148,7 @@ const SignUpForm = ({ navigate }) => {
             onChange={handleConfirmPasswordChange}
           />
         </div>
-        <p className='error'>{errorMessage}</p>
+        <p className="error">{errorMessage}</p>
         <div className="text-center">
           <button
             type="submit"
