@@ -5,6 +5,7 @@
   "license": "CC BY-NC-SA",
   "private": true,
   "scripts": {
+    "deploy": "node ./bin/www",
     "start": "nodemon ./bin/www",
     "start:test": "MONGODB_URL='mongodb://0.0.0.0/acebook_test' npm start",
     "test": "jest"
