@@ -154,6 +154,9 @@ const Post = ({ post, token, user }) => {
         >
           Comment
         </button>
+        <button className="btn btn-primary">
+          Hide
+        </button>
       </div>
       <div className="comments">
         {post.comments.length ? (
