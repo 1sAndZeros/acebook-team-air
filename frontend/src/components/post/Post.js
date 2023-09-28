@@ -12,10 +12,16 @@ const Post = ({ post, token, user }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   //filters rude words and replaces them with *
   const ReplaceRudeWords = (post) => {
     return filter.clean(post);
+};
+
+// Toggle the 'hidden' state
+const handleHideClick = () => {
+  setHidden(true);
 };
 
   useEffect(() => {
@@ -131,7 +137,7 @@ const Post = ({ post, token, user }) => {
   };
 
   return (
-    <article className="post" data-cy="post" key={post._id}>
+    <article className={`post ${hidden ? 'hidden' : ''}`} data-cy="post" key={post._id}>
       <div className="post-header">
         <Avatar size={50} user={post.user}/>
         <div>
@@ -154,9 +160,9 @@ const Post = ({ post, token, user }) => {
         >
           Comment
         </button>
-        <button className="btn btn-primary">
-          Hide
-        </button>
+        <button onClick={handleHideClick} className="btn btn-primary">
+        {hidden ? "Show" : "Hide"}
+      </button>
       </div>
       <div className="comments">
         {post.comments.length ? (
