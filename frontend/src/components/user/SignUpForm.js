@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import "./SignUpForm.css";
+const Filter = require("bad-words");
 
 const SignUpForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
@@ -8,9 +10,17 @@ const SignUpForm = ({ navigate }) => {
   const [photo, setPhoto] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [hide, setHide] = useState(true);
+  const filter = new Filter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (filter.isProfane(username)) {
+      setErrorMessage(
+        "Username contains profanity. Please choose a different username."
+      );
+      return;
+    }
     if (!passwordValiding(password)) {
       setErrorMessage(
         "Password not valid. Password must include an uppercase and lowercase character, a special character (@$!%*?&) and be a minimum of 8 characters"
@@ -18,7 +28,7 @@ const SignUpForm = ({ navigate }) => {
     } else if (password != confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else {
-      fetch(`${process.env.REACT_APP_API_URL}/users`, {
+      fetch("/users", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -73,6 +83,14 @@ const SignUpForm = ({ navigate }) => {
     setPhoto(event.target.value);
   };
 
+  const hideHandler = () => {
+    if (hide == true) {
+      setHide(false);
+    } else {
+      setHide(true);
+    }
+  };
+
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center p-4">
       <form id="signup-form" className="rounded-4 p-3" onSubmit={handleSubmit}>
@@ -91,7 +109,7 @@ const SignUpForm = ({ navigate }) => {
             autoComplete="off"
           />
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="photo" className="form-label">
             photoURL
           </label>
@@ -104,7 +122,7 @@ const SignUpForm = ({ navigate }) => {
             placeholder="photoURL"
             autoComplete="off"
           />
-        </div>
+        </div> */}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email address
@@ -120,12 +138,12 @@ const SignUpForm = ({ navigate }) => {
             aria-describedby="emailHelp"
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
+        <label htmlFor="password" className="form-label">
+          Password
+        </label>
+        <div className="mb-3 input-group">
           <input
-            type="password"
+            type={hide ? "password" : "text"}
             placeholder="Password"
             className="form-control"
             id="password"
@@ -133,13 +151,24 @@ const SignUpForm = ({ navigate }) => {
             value={password}
             onChange={handlePasswordChange}
           />
+          <button type="button" className="hide-button btn btn-secondary">
+            {!hide ? (
+              <i id="hide-icon" className="fa fa-eye" onClick={hideHandler}></i>
+            ) : (
+              <i
+                id="hide-icon"
+                className="fa fa-eye-slash"
+                onClick={hideHandler}
+              ></i>
+            )}
+          </button>
         </div>
         <div className="mb-3">
           <label htmlFor="confirm-password" className="form-label">
             Confirm Password
           </label>
           <input
-            type="password"
+            type={hide ? "password" : "text"}
             placeholder="Re-enter Password"
             className="form-control"
             id="confirm-password"

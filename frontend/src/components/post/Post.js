@@ -3,13 +3,28 @@ import Comment from "../comment/Comment";
 import Like from "../like/Like";
 import "./Post.css";
 import Avatar from "../user/Avatar";
+import EditPostModal from "./EditPostModal";
+import DeletePost from "../deletePost/DeletePost";
+const Filter = require("bad-words");
+const filter = new Filter();
 
-const Post = ({ post, token, user }) => {
+const Post = ({ post, token, user, setPosts }) => {
   const commentBox = useRef();
   const [newComment, setNewComment] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [message, setMessage] = useState(post.message || "");
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+
+  //filters rude words and replaces them with *
+  const ReplaceRudeWords = (dirtyPost) => {
+    if (dirtyPost) {
+      return filter.clean(dirtyPost);
+    }
+  };
 
   useEffect(() => {
     if (token) {
@@ -32,11 +47,10 @@ const Post = ({ post, token, user }) => {
     }
   }, [likeCount]);
 
-  const postedAt = new Date(post.createdAt);
-  const formattedDate = `${postedAt.toDateString()} -
-  ${String(postedAt.getHours().toPrecision().padStart(2, "0"))}:${String(
-    postedAt.getMinutes().toPrecision().padStart(2, "0")
-  )}`;
+  const formattedDate = new Date(post.createdAt).toLocaleString("en-gb", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);
@@ -71,12 +85,10 @@ const Post = ({ post, token, user }) => {
           }
         })
         .then((data) => {
-          console.log("data:", data);
           setLikeCount(data.likes.length);
           const filteredLikes = data.likes.filter((like) => {
             return like.userId === user._id;
           });
-          console.log("filteredLikes:", filteredLikes);
           if (filteredLikes.length > 0) {
             setLiked(true);
           } else {
@@ -110,14 +122,27 @@ const Post = ({ post, token, user }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
-      }).then((response) => {
-        if (response.status === 201) {
-          window.location.reload();
-          console.log("Post successfully added");
-        } else {
-          console.log("Post not successfully added");
-        }
-      });
+      })
+        .then((response) => {
+          if (response.status === 201) {
+            console.log("Comment successfully added");
+            return response.json();
+          } else {
+            console.log("Comment not successfully added");
+          }
+        })
+        .then((data) => {
+          // add created comment to posts array
+          setPosts((prev) => {
+            return prev.map((prevPost) => {
+              if (prevPost._id === post._id) {
+                prevPost.comments.push(data.comment);
+              }
+              return prevPost;
+            });
+          });
+          setNewComment("");
+        });
     } else {
       console.log("No token!");
     }
@@ -132,17 +157,29 @@ const Post = ({ post, token, user }) => {
           <p className="datetime">{formattedDate}</p>
         </div>
       </div>
-      <p>{post.message}</p>
-      {post.photo && (
-        <img
-          className="post-img"
-          src={`${process.env.REACT_APP_API_URL}/${post.photo}`}
+      <div className="post-icons">
+        <i
+          onClick={handleShowModal}
+          className="edit-icon fa fa-pencil"
+          aria-hidden="true"
         />
-      )}
+        <DeletePost postId={post._id} token={token} setPosts={setPosts} />
+      </div>
+      <p>{ReplaceRudeWords(message)}</p>
+      {post.photo && <img className="post-img" src={`/${post.photo}`} />}
       <Like likeCount={likeCount} />
       <div className="post-buttons">
         <button onClick={handleLikeClick} className="btn btn-primary">
-          {liked ? "Unlike" : "Like"}
+          {liked ? (
+            <span>
+              Unlike
+              <i class="fa fa-thumbs-o-down ms-2" aria-hidden="true"></i>
+            </span>
+          ) : (
+            <span>
+              Like <i className="fa fa-thumbs-o-up ms-2" aria-hidden="true"></i>
+            </span>
+          )}
         </button>
         <button
           onClick={() => {
@@ -153,6 +190,16 @@ const Post = ({ post, token, user }) => {
           Comment
         </button>
       </div>
+
+      <EditPostModal
+        showModal={showModal}
+        handleClose={() => setShowModal(false)}
+        post={post}
+        token={token}
+        setShowModal={setShowModal}
+        setMessage={setMessage} // change the message from inside the modal
+      />
+
       <div className="comments">
         {post.comments.length ? (
           post.comments.map((comment) => (
@@ -162,6 +209,7 @@ const Post = ({ post, token, user }) => {
               post={post}
               token={token}
               user={user}
+              setPosts={setPosts}
             />
           ))
         ) : (

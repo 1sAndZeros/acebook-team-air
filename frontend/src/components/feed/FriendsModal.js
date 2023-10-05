@@ -3,7 +3,7 @@ import "font-awesome/css/font-awesome.min.css";
 import React, { useEffect, useState } from "react";
 import FriendProfile from "../FriendsCard/FriendProfile";
 
-const FriendsModal = ({ setModal, token }) => {
+const FriendsModal = ({ setModal, token, user, myFriends, setMyFriends }) => {
   const [users, setUsers] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState(null);
   const [searchField, setSearchField] = useState("");
@@ -14,14 +14,16 @@ const FriendsModal = ({ setModal, token }) => {
 
   useEffect(() => {
     if (token) {
-      fetch(`${process.env.REACT_APP_API_URL}/allusers`, {
+      fetch("/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => response.json())
         .then(async (data) => {
-          setUsers(data.users);
+          setUsers(
+            data.users.filter((returnedUser) => returnedUser._id !== user._id)
+          );
         });
     }
   }, []);
@@ -35,6 +37,7 @@ const FriendsModal = ({ setModal, token }) => {
       const filteredUsers = users.filter((user) => {
         return user.username.toLowerCase().includes(searchField.toLowerCase());
       });
+      console.log(filteredUsers);
       setFilteredUsers(filteredUsers);
     }
   }, [searchField, users]);
@@ -60,8 +63,15 @@ const FriendsModal = ({ setModal, token }) => {
       </div>
       <div id="friendProfile">
         {filteredUsers &&
-          filteredUsers.map((user) => (
-            <FriendProfile user={user} token={token} key={user._id} />
+          filteredUsers.map((filteredUser) => (
+            <FriendProfile
+              friend={filteredUser}
+              user={user}
+              token={token}
+              key={filteredUser._id}
+              myFriends={myFriends}
+              setMyFriends={setMyFriends}
+            />
           ))}
       </div>
     </div>
