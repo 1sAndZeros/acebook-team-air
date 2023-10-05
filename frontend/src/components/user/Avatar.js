@@ -42,6 +42,7 @@ const Avatar = ({ size = 200, user }) => {
         className="avatar"
         style={imgStyle}
         src={`${process.env.REACT_APP_API_URL}/avatars/${user.photo}`}
+        alt="avatar"
       />
     ) : (
       <div className="fallback" style={fallbackStyle}>

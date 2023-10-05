@@ -166,7 +166,13 @@ const Post = ({ post, token, user, setPosts }) => {
         <DeletePost postId={post._id} token={token} setPosts={setPosts} />
       </div>
       <p>{ReplaceRudeWords(message)}</p>
-      {post.photo && <img className="post-img" src={`/${post.photo}`} />}
+      {post.photo && (
+        <img
+          className="post-img"
+          src={`${process.env.REACT_APP_API_URL}/${post.photo}`}
+          alt="post"
+        />
+      )}
       <Like likeCount={likeCount} />
       <div className="post-buttons">
         <button onClick={handleLikeClick} className="btn btn-primary">

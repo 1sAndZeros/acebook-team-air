@@ -39,7 +39,7 @@ const LogInForm = ({ navigate }) => {
   };
 
   const hideHandler = () => {
-    if (hide == true) {
+    if (hide === true) {
       setHide(false);
     } else {
       setHide(true);
