@@ -2,7 +2,7 @@ import React from "react";
 
 const DeletePost = ({ postId, token, setPosts }) => {
   const handleDeletePostClick = () => {
-    fetch(`/posts/${postId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/posts/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -13,8 +13,7 @@ const DeletePost = ({ postId, token, setPosts }) => {
           console.log("post deleted successfully");
           setPosts((delPosts) => {
             return delPosts.filter((post) => post._id !== postId);
-
-        })
+          });
         }
       })
       .catch((error) => {
@@ -23,7 +22,11 @@ const DeletePost = ({ postId, token, setPosts }) => {
   };
 
   return (
-    <i className="fa fa-trash-o" aria-hidden="true" onClick={handleDeletePostClick}></i>
+    <i
+      className="fa fa-trash-o"
+      aria-hidden="true"
+      onClick={handleDeletePostClick}
+    ></i>
   );
 };
 

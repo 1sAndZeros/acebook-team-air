@@ -28,7 +28,7 @@ const SignUpForm = ({ navigate }) => {
     } else if (password != confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else {
-      fetch("/users", {
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

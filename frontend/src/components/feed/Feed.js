@@ -16,7 +16,7 @@ const Feed = ({ navigate }) => {
 
   useEffect(() => {
     if (token) {
-      fetch("/users/me", {
+      fetch(`${process.env.REACT_APP_API_URL}/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

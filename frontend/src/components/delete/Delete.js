@@ -2,7 +2,7 @@ import React from "react";
 
 const Delete = ({ commentId, token, setPosts }) => {
   const handleDeleteClick = () => {
-    fetch(`/comments/${commentId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/comments/${commentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

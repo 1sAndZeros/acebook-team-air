@@ -7,31 +7,6 @@ import Feed from "../feed/Feed";
 import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
 
 const App = () => {
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   if (token) {
-  //     fetch("/users/me", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //       .then((response) => {
-  //         if (response.ok) {
-  //           return response.json();
-  //         } else {
-  //           window.localStorage.removeItem("token");
-  //           window.location.href = "https://www.google.com";
-  //         }
-  //       })
-  //       .then(async (data) => {
-  //         window.localStorage.setItem("token", data.token);
-  //         setToken(window.localStorage.getItem("token"));
-  //         setUser(data.user);
-  //       });
-  //   }
-  // }, []);
-
   return (
     <Routes>
       <Route

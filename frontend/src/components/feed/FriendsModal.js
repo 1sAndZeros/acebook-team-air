@@ -14,7 +14,7 @@ const FriendsModal = ({ setModal, token, user, myFriends, setMyFriends }) => {
 
   useEffect(() => {
     if (token) {
-      fetch("/users", {
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
