@@ -16,13 +16,13 @@ const EditPostModal = ({
   // Update post handler
   const handlePostUpdate = () => {
     if (token) {
-      fetch(`/posts/${post._id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/posts/${post._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({message: newMessage}), // Format as an object otherwise it will break
+        body: JSON.stringify({ message: newMessage }), // Format as an object otherwise it will break
       })
         .then((response) => {
           if (response.status === 200) {
@@ -36,10 +36,10 @@ const EditPostModal = ({
           // Update message in post component (triggered by state change)
           setMessage(data.post.message);
           // Close the Edit Post modal after updating post
-          setShowModal(false); 
+          setShowModal(false);
         });
     }
-  };  
+  };
 
   if (!showModal) {
     return null;
@@ -57,14 +57,16 @@ const EditPostModal = ({
         <div className="custom-modal-body">
           {/* Updates the newMessage state with the current
            text in the text area whenever it changes */}
-          <textarea  // handles text input
+          <textarea // handles text input
             className="form-input"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />
         </div>
         <div className="custom-modal-footer">
-          <button className="save-changes-button" onClick={handlePostUpdate}>Save changes</button>
+          <button className="save-changes-button" onClick={handlePostUpdate}>
+            Save changes
+          </button>
         </div>
       </div>
     </div>

@@ -25,10 +25,10 @@ const SignUpForm = ({ navigate }) => {
       setErrorMessage(
         "Password not valid. Password must include an uppercase and lowercase character, a special character (@$!%*?&) and be a minimum of 8 characters"
       );
-    } else if (password != confirmPassword) {
+    } else if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else {
-      fetch("/users", {
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const SignUpForm = ({ navigate }) => {
   };
 
   const hideHandler = () => {
-    if (hide == true) {
+    if (hide === true) {
       setHide(false);
     } else {
       setHide(true);

@@ -11,7 +11,7 @@ const LogInForm = ({ navigate }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let response = await fetch("/tokens", {
+    let response = await fetch(`${process.env.REACT_APP_API_URL}/tokens`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const LogInForm = ({ navigate }) => {
   };
 
   const hideHandler = () => {
-    if (hide == true) {
+    if (hide === true) {
       setHide(false);
     } else {
       setHide(true);

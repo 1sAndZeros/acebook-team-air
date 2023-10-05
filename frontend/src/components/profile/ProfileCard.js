@@ -24,7 +24,7 @@ const ProfileCard = ({ user, setUser, posts }) => {
       const formData = new FormData();
       formData.append("avatar", newAvatar);
       if (token) {
-        fetch(`/users/${user._id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/users/${user._id}`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,6 +53,7 @@ const ProfileCard = ({ user, setUser, posts }) => {
       <img
         className="cover-photo"
         src="https://images.unsplash.com/photo-1547626740-02cb6aed9ef8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+        alt="cover"
       />
       <div className="details">
         <div className="avatar-container">
@@ -76,7 +77,9 @@ const ProfileCard = ({ user, setUser, posts }) => {
         <h3>My Photos</h3>
         <div className="photo-images">
           {photos.map((photo) => {
-            return <img src={`/${photo}`} />;
+            return (
+              <img src={`${process.env.REACT_APP_API_URL}/${photo}`} alt="" />
+            );
           })}
         </div>
       </div>

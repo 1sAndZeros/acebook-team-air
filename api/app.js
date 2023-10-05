@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const tokenChecker = require("./lib/tokenChecker");
-
+var cors = require("cors");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
 const authenticationRouter = require("./routes/authentication");
@@ -15,7 +15,11 @@ const app = express();
 
 // setup for receiving JSON
 app.use(express.json());
-
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "https://acebook-team-air.netlify.app",
+  })
+);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));

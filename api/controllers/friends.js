@@ -56,9 +56,17 @@ const FriendsController = {
               throw error;
             }
             const token = TokenGenerator.jsonwebtoken(req.user_id);
-            User.findById(req.user_id).exec((err, data) => {
-              res.status(201).json({ message: "OK", token: token, user: data });
-            });
+            User.findById(req.user_id)
+              .populate({
+                path: "friends_array",
+                model: "User",
+                select: "-password",
+              })
+              .exec((err, data) => {
+                res
+                  .status(201)
+                  .json({ message: "OK", token: token, user: data });
+              });
           }
         );
       }

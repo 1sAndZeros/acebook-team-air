@@ -21,7 +21,7 @@ const Comment = ({ comment, post, token, user, setPosts }) => {
   // Get all data
   useEffect(() => {
     if (token) {
-      fetch(`/likes?commentId=${comment._id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/likes?commentId=${comment._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +52,7 @@ const Comment = ({ comment, post, token, user, setPosts }) => {
       if (liked) {
         method = "DELETE";
       }
-      fetch("/likes", {
+      fetch(`${process.env.REACT_APP_API_URL}/likes`, {
         method: method,
         headers: {
           "Content-Type": "application/json",
@@ -94,9 +94,9 @@ const Comment = ({ comment, post, token, user, setPosts }) => {
     if (editMode && editedComment !== comment.content) {
       console.log("now make patch request", editedComment, comment.content);
       console.log("we will send it with this data", editedComment);
-    
+
       //make fetch to update db
-      fetch(`/comments/${comment._id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/comments/${comment._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -113,13 +113,12 @@ const Comment = ({ comment, post, token, user, setPosts }) => {
           }
         })
         .then((data) => {
-          console.log("data:", data)
+          console.log("data:", data);
           console.log("data comment", data.comment.content);
           setEditedComment(data.comment.content);
           setEditMode(!editMode);
           // window.location.reload();
         });
-
     } else {
       setEditMode(!editMode);
     }
@@ -137,12 +136,29 @@ const Comment = ({ comment, post, token, user, setPosts }) => {
         <div className="details">
           <p className="username">{comment.user.username}</p>
           {/* Update comment & toggle edit button display */}
-          <p onInput={handleCommentChange} contentEditable={`${editMode}`} ref={commentRef} tabIndex="0">
+          <p
+            onInput={handleCommentChange}
+            contentEditable={`${editMode}`}
+            ref={commentRef}
+            tabIndex="0"
+          >
             {ReplaceRudeWords(comment.content)}
           </p>
           <div className="comment-buttons">
-          {editMode ? <i onClick={handleEdit} className="edit-icon fa fa-floppy-o" aria-hidden="true"></i> : <i onClick={handleEdit} className="edit-icon fa fa-pencil" aria-hidden="true"></i>}
-          <Delete commentId={comment._id} token={token} setPosts={setPosts} />
+            {editMode ? (
+              <i
+                onClick={handleEdit}
+                className="edit-icon fa fa-floppy-o"
+                aria-hidden="true"
+              ></i>
+            ) : (
+              <i
+                onClick={handleEdit}
+                className="edit-icon fa fa-pencil"
+                aria-hidden="true"
+              ></i>
+            )}
+            <Delete commentId={comment._id} token={token} setPosts={setPosts} />
           </div>
         </div>
         <div className="info">

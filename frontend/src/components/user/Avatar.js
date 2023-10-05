@@ -38,7 +38,12 @@ const Avatar = ({ size = 200, user }) => {
 
   if (user) {
     return user.photo ? (
-      <img className="avatar" style={imgStyle} src={`/avatars/${user.photo}`} />
+      <img
+        className="avatar"
+        style={imgStyle}
+        src={`${process.env.REACT_APP_API_URL}/avatars/${user.photo}`}
+        alt="avatar"
+      />
     ) : (
       <div className="fallback" style={fallbackStyle}>
         <p style={{ margin: 0 }}>{user && user.username[0].toUpperCase()}</p>

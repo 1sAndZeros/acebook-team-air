@@ -11,7 +11,7 @@ const Profile = ({ navigate, user }) => {
 
   useEffect(() => {
     if (token) {
-      fetch("/posts", {
+      fetch(`${process.env.REACT_APP_API_URL}/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

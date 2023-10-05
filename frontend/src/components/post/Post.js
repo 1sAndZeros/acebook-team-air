@@ -28,7 +28,7 @@ const Post = ({ post, token, user, setPosts }) => {
 
   useEffect(() => {
     if (token) {
-      fetch(`/likes?postId=${post._id}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/likes?postId=${post._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,7 +68,7 @@ const Post = ({ post, token, user, setPosts }) => {
       if (liked) {
         method = "DELETE";
       }
-      fetch("/likes", {
+      fetch(`${process.env.REACT_APP_API_URL}/likes`, {
         method: method,
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +115,7 @@ const Post = ({ post, token, user, setPosts }) => {
     };
 
     if (token) {
-      fetch("/comments", {
+      fetch(`${process.env.REACT_APP_API_URL}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +166,13 @@ const Post = ({ post, token, user, setPosts }) => {
         <DeletePost postId={post._id} token={token} setPosts={setPosts} />
       </div>
       <p>{ReplaceRudeWords(message)}</p>
-      {post.photo && <img className="post-img" src={`/${post.photo}`} />}
+      {post.photo && (
+        <img
+          className="post-img"
+          src={`${process.env.REACT_APP_API_URL}/${post.photo}`}
+          alt="post"
+        />
+      )}
       <Like likeCount={likeCount} />
       <div className="post-buttons">
         <button onClick={handleLikeClick} className="btn btn-primary">

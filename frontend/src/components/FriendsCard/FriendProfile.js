@@ -24,7 +24,7 @@ const FriendProfile = ({ friend, token, user, myFriends, setMyFriends }) => {
     }
 
     if (token) {
-      fetch("/friends", {
+      fetch(`${process.env.REACT_APP_API_URL}/friends`, {
         method: method,
         headers: {
           "Content-Type": "application/json",
